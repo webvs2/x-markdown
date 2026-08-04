@@ -1,3 +1,4 @@
+export * from './useCodeClipboard'
 export * from './useComponents'
 export * from './useHighlight'
 export * from './useMarkdown'

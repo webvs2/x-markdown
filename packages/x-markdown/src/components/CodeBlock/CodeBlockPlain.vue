@@ -12,6 +12,7 @@
           :code="code"
           :copy="copy"
           :copied="copied"
+          :set-copied="setCopied"
           :collapsed="collapsed"
           :toggleCollapse="toggleCollapse"
         >
@@ -39,7 +40,7 @@
             <span class="x-md-code-lang">{{ language }}</span>
           </div>
           <div class="x-md-code-header__right">
-            <slot name="codeActions" :code="code" :copy="copy" :copied="copied">
+            <slot name="codeActions" :code="code" :copy="copy" :copied="copied" :set-copied="setCopied">
               <button class="x-md-copy-btn" :class="{ 'x-md-copy-btn--copied': copied }" @click="copy(code)">
                 <svg
                   v-if="copied"
@@ -99,7 +100,7 @@
 
 <script setup lang="ts">
 import { computed, ref, type CSSProperties } from 'vue'
-import { useClipboard } from '@vueuse/core'
+import { useCodeClipboard } from '../../hooks/useCodeClipboard'
 
 interface CodeBlockPlainProps {
   code: string
@@ -116,7 +117,7 @@ defineOptions({
   name: 'CodeBlockPlain',
 })
 
-const { copy, copied } = useClipboard({ copiedDuring: 2000, legacy: true })
+const { copy, copied, setCopied } = useCodeClipboard(2000)
 
 const collapsed = ref(false)
 
@@ -169,6 +170,7 @@ const codeContentStyle = computed<CSSProperties>(
 defineExpose({
   copy,
   copied,
+  setCopied,
   collapsed,
   toggleCollapse,
 })

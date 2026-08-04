@@ -57,8 +57,9 @@ type CodeBlockSlotFn = (props: CodeBlockSlotProps) => VNode | VNode[]
 export interface CodeBlockSlotProps {
   language: string;
   code: string;
-  copy: (text: string) => void;
+  copy: (text: string) => void | Promise<void>;
   copied: boolean;
+  setCopied: (value: boolean, duration?: number) => void;
   collapsed: boolean;
   toggleCollapse: () => void;
 }

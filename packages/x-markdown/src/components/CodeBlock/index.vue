@@ -13,6 +13,7 @@
           :code="code"
           :copy="copy"
           :copied="copied"
+          :set-copied="setCopied"
           :collapsed="collapsed"
           :toggleCollapse="toggleCollapse"
         >
@@ -40,7 +41,7 @@
             <span class="x-md-code-lang">{{ language }}</span>
           </div>
           <div class="x-md-code-header__right">
-            <slot name="codeActions" :code="code" :copy="copy" :copied="copied">
+            <slot name="codeActions" :code="code" :copy="copy" :copied="copied" :set-copied="setCopied">
               <button
                 v-for="action in filteredActions"
                 :key="action.key"
@@ -110,7 +111,7 @@
 <script setup lang="ts">
 import { computed, ref, h, type VNode } from 'vue'
 import type { BuiltinTheme } from 'shiki'
-import { useClipboard } from '@vueuse/core'
+import { useCodeClipboard } from '../../hooks/useCodeClipboard'
 import type { CodeBlockProps, CodeBlockAction, CodeBlockSlotProps } from './types'
 import SyntaxCodeBlock from './SyntaxCodeBlock.vue'
 
@@ -118,7 +119,7 @@ defineOptions({
   name: 'CodeBlock',
 })
 
-const { copy, copied } = useClipboard({ copiedDuring: 2000, legacy: true })
+const { copy, copied, setCopied } = useCodeClipboard(2000)
 
 const collapsed = ref(false)
 
@@ -159,6 +160,7 @@ const slotProps = computed<CodeBlockSlotProps>(() => ({
   code: code.value,
   copy,
   copied: copied.value,
+  setCopied,
   collapsed: collapsed.value,
   toggleCollapse,
 }))
@@ -195,6 +197,7 @@ function handleActionClick(action: CodeBlockAction) {
 defineExpose({
   copy,
   copied,
+  setCopied,
   collapsed,
   toggleCollapse,
   syntaxCodeBlockRef,
